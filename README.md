@@ -27,7 +27,7 @@ pip3 install --user Pillow
 To deploy the tool quickly on a workstation, you can use the following one-liner:
 
 ```bash
-git clone https://github.com/Nary14/croissantage42.git && cd && python3 croissant_lock.py
+git clone https://github.com/Nary14/croissantage42.git && cd croissantage42 && python3 croissant_lock.py
 ```
 
 ### Configuration
