@@ -5,7 +5,7 @@ import os
 
 # --- CONFIGURATION ---
 IMAGE_FILE = "vous avez été sédapé.png" # Remplace par le nom de ton image sedape
-SECRET_KEY = "<Tab-4-/>"#mets ici le touche que tu veux pour fermer le lock (ex: "<Control-Alt-Key-x>" pour Ctrl+Alt+X) 
+SECRET_KEY = "<Control-Alt-Key-x>"#mets ici le touche que tu veux pour fermer le lock (ex: "<Control-Alt-Key-x>" pour Ctrl+Alt+X) 
 # ---------------------
 
 class SedapeLock:
