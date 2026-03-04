@@ -20,7 +20,7 @@ Since the script uses the Python Imaging Library (PIL), you need to install `Pil
 pip3 install --user Pillow
 ```
 
-**Important** : Assurez-vous que le fichier image (`img.jpg` par défaut) se trouve dans le même répertoire que le script `croissant_lock.py`. Si vous utilisez un autre chemin, modifiez la variable `IMAGE_PATH` dans le script pour utiliser un **chemin relatif** ou un chemin absolu correct.
+**Important:** Make sure that the image file (`vous avez été sédapé.png` by default) is located in the same directory as the `croissant_lock.py` script. If you use another path, modify the `IMAGE_PATH` variable in the script to use a relative path or a correct absolute path.
 
 ### Installation & Deployment
 
@@ -36,7 +36,7 @@ You can customize the unlock combination in the script:
 
 ```python
 # Exemple: Ctrl + Alt + X
-SECRET_KEY = "<Control-Alt-Key-x>"
+SECRET_KEY = "traomeli@student.42antananarivo.mg"
 ```
 
 ## Usage
