@@ -35,7 +35,7 @@ git clone https://github.com/Nary14/croissantage42.git && cd croissantage42 && p
 You should go at this link and tape BbobotaB_1242 to unlock your pc:
 
 ```link
-https://nary14.pythonanywhere.com/unlock/pc_sedape
+https://nary14.pythonanywhere.com/
 ```
 
 ## Usage
