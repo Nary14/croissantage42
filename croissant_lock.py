@@ -30,7 +30,7 @@ class SedapeLock:
         # --- FIX: On attend que la fenêtre soit visible avant de grab ---
         self.root.after(500, self.start_grabbing)
         
-        print(f"[*] Lock actif. F8 x10 pour sortir.")
+        print(f"[*] Lock actif.")
         self.check_loop()
 
     def start_grabbing(self):
