@@ -20,7 +20,7 @@ Since the script uses the Python Imaging Library (PIL), you need to install `Pil
 pip3 install --user Pillow
 ```
 
-**Important:** Make sure that the image file (`vous avez été sédapé.png` by default) is located in the same directory as the `croissant_lock.py` script. If you use another path, modify the `IMAGE_PATH` variable in the script to use a relative path or a correct absolute path.
+**Important:** Make sure that the image file (`sedape.jpg` by default) is located in the same directory as the `croissant_lock.py` script. If you use another path, modify the `IMAGE_PATH` variable in the script to use a relative path or a correct absolute path.
 
 ### Installation & Deployment
 
